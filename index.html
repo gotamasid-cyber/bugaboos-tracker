@@ -47,7 +47,9 @@
   .stat .v small{font-size:12px;color:var(--mist);font-weight:500;}
   .bar{height:5px;background:var(--granite-3);border-radius:99px;margin-top:9px;overflow:hidden;}
   .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--summit-dim),var(--summit));width:0;transition:width .5s ease;}
-  .nav{display:flex;gap:7px;margin:11px 0 2px;}
+  .nav{display:flex;gap:7px;margin:11px 0 2px;position:sticky;top:0;z-index:100;
+    background:var(--granite-0);padding:10px 0 8px;margin-left:-14px;margin-right:-14px;padding-left:14px;padding-right:14px;
+    border-bottom:1px solid var(--line-soft);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
   .nav button{flex:1;border:1px solid var(--line);background:var(--granite-2);color:var(--ice);
     font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:11px 6px;border-radius:var(--rad);cursor:pointer;
     display:flex;align-items:center;justify-content:center;gap:6px;}
