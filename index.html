@@ -50,7 +50,7 @@
   .nav{display:flex;gap:7px;position:fixed;top:env(safe-area-inset-top);left:0;right:0;z-index:200;
     background:#0c1116;padding:10px 14px 9px;border-bottom:1px solid #1f2c35;
     -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);}
-  .nav-spacer{height:calc(58px + env(safe-area-inset-top));}
+  .nav-spacer{height:60px;}
   .nav button{flex:1;border:1px solid var(--line);background:var(--granite-2);color:var(--ice);
     font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:11px 6px;border-radius:var(--rad);cursor:pointer;
     display:flex;align-items:center;justify-content:center;gap:6px;}
@@ -499,8 +499,11 @@ function renderPlan(){
   const cur=currentWeek();
   let html="";
   for(const ph of PHASES){
-    html+=`<div class="phase-label"><span class="pn">${ph.n.toUpperCase()}</span><h3>${ph.name}</h3>
-      <span class="span num">${MO[wkStart(ph.from).getMonth()]} – ${MO[wkStart(ph.to).getMonth()]}</span></div>`;
+    html+=`<div class="phase-label" data-phase="${ph.n}" style="cursor:pointer;user-select:none;">
+      <span class="pn">${ph.n.toUpperCase()}</span><h3>${ph.name}</h3>
+      <span class="span num">${MO[wkStart(ph.from).getMonth()]} – ${MO[wkStart(ph.to).getMonth()]}</span>
+      <span class="phase-chev" style="margin-left:8px;color:var(--mist-dim);font-size:12px;">▾</span></div>
+    <div class="phase-body" data-phase="${ph.n}">`;
     for(let n=ph.from;n<=ph.to;n++){
       const w=WEEKS[n-1];
       const st=reqStats(w);
@@ -524,18 +527,31 @@ function renderPlan(){
           }).join("")}</ul>
         </div></div>`;
     }
+    html+="</div>";
   }
   planEl.innerHTML=html;
-  // accordion toggles
+  // phase collapse
+  planEl.querySelectorAll(".phase-label").forEach(h=>h.addEventListener("click",()=>{
+    const body=planEl.querySelector(`.phase-body[data-phase="${h.dataset.phase}"]`);
+    const chev=h.querySelector(".phase-chev");
+    const hidden=body.style.display==="none";
+    body.style.display=hidden?"":"none";
+    chev.textContent=hidden?"▾":"▸";
+  }));
+  // week accordion
   planEl.querySelectorAll(".wk-head").forEach(h=>h.addEventListener("click",e=>{
     if(e.target.matches("input,label"))return;
     h.parentElement.classList.toggle("open");
   }));
-  // checkbox handlers
+  // checkboxes
   planEl.querySelectorAll('input[type=checkbox]').forEach(cb=>cb.addEventListener("change",()=>{
     if(cb.checked)S.checks[cb.id]=true;else delete S.checks[cb.id];
     save();updateWeek(cb.id.split("_")[0].slice(1));updateProgress();
   }));
+  // dynamic spacer
+  const nav=document.querySelector(".nav");
+  const spacer=document.querySelector(".nav-spacer");
+  if(nav&&spacer)spacer.style.height=nav.offsetHeight+"px";
 }
 function updateWeek(n){
   n=+n;const w=WEEKS[n-1];
