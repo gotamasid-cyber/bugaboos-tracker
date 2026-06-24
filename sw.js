@@ -1,4 +1,4 @@
-const CACHE = "bugaboos-v1";
+const CACHE = "bugaboos-v2";
 const ASSETS = [
   "./",
   "./index.html",

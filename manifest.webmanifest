@@ -1,7 +1,7 @@
 {
   "name": "Bugaboos 2027",
   "short_name": "Bugaboos",
-  "start_url": "./index.html",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
